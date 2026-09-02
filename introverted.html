@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlocking…</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{ --pink:#f6a0db; --teal:#00efc3; --crimson:#f12454; --ink:#0a0a12; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono', monospace; background:#fff; color:var(--ink); padding:20px; }
+  .box{ width:min(90vw,340px); text-align:center; }
+  .label{ font-family:'Press Start 2P', monospace; font-size:12px; margin-bottom:18px; letter-spacing:.5px; }
+  .item{ color:var(--crimson); }
+  .bar{ height:16px; background:#f2f2f2; border:2px solid var(--ink); overflow:hidden; margin-bottom:10px; }
+  .fill{ height:100%; width:0%; background: repeating-linear-gradient(45deg, var(--crimson) 0 8px, var(--pink) 8px 16px, var(--teal) 16px 24px);
+    background-size:34px 100%; animation: fillbar 2.6s steps(20) forwards, slide 1s linear infinite; }
+  @keyframes fillbar{ from{ width:0%; } to{ width:100%; } }
+  @keyframes slide{ from{background-position-x:0;} to{background-position-x:34px;} }
+  .pct{ font-family:'Press Start 2P', monospace; font-size:10px; color:#8a7d92; }
+  small a{ color:var(--crimson); }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="label">UNLOCKING</div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="pct" id="pct">0%</div>
+  <br><small><a href="index.html?unlock=introverted">tap here if nothing happens</a></small>
+</div>
+<script>
+  var pct = document.getElementById('pct');
+  var start = Date.now();
+  var duration = 2600;
+  var timer = setInterval(function(){
+    var elapsed = Date.now() - start;
+    var p = Math.min(100, Math.round((elapsed/duration)*100));
+    pct.textContent = p + '%';
+    if(p >= 100) clearInterval(timer);
+  }, 60);
+  setTimeout(function(){ location.replace('index.html?unlock=introverted'); }, duration + 300);
+</script>
+</body>
+</html>
