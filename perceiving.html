@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlocking…</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{ --pink:#f6a0db; --teal:#00efc3; --crimson:#f12454; --ink:#0a0a12; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono', monospace; background:#fff; color:var(--ink); padding:20px; }
+  .box{ width:min(90vw,340px); text-align:center; }
+  .label{ font-family:'Press Start 2P', monospace; font-size:12px; margin-bottom:18px; letter-spacing:.5px; }
+  .item{ color:var(--crimson); }
+  .bar{ height:16px; background:#f2f2f2; border:2px solid var(--ink); overflow:hidden; margin-bottom:10px; }
+  .fill{ height:100%; width:0%; background: repeating-linear-gradient(45deg, var(--crimson) 0 8px, var(--pink) 8px 16px, var(--teal) 16px 24px);
+    background-size:34px 100%; animation: fillbar 2.6s steps(20) forwards, slide 1s linear infinite; }
+  @keyframes fillbar{ from{ width:0%; } to{ width:100%; } }
+  @keyframes slide{ from{background-position-x:0;} to{background-position-x:34px;} }
+  .pct{ font-family:'Press Start 2P', monospace; font-size:10px; color:#8a7d92; }
+  .continue-btn{ font-family:'Press Start 2P', monospace; font-size:11px; background:var(--ink); color:#fff;
+    border:none; padding:11px 16px; cursor:pointer; box-shadow:3px 3px 0 var(--teal); margin-top:22px; }
+  .continue-btn:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--teal); }
+  .fallback-link{ margin-top:14px; }
+  .fallback-link a{ color:var(--crimson); font-size:13px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="label">UNLOCKING</div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="pct" id="pct">0%</div>
+  <div class="fallback-link" id="fallbackLink"><small><a href="index.html?unlock=perceiving">tap here if nothing happens</a></small></div>
+</div>
+<script>
+  var ITEM_ID = 'perceiving';
+  var ALL_ITEMS = ['introverted','intuitive','thinking','perceiving'];
+  var STORAGE_KEY = 'jacobInventoryUnlocked_v1';
+
+  var pctEl = document.getElementById('pct');
+  var fallbackLink = document.getElementById('fallbackLink');
+  var start = Date.now();
+  var duration = 2600;
+  var timer = setInterval(function(){
+    var elapsed = Date.now() - start;
+    var p = Math.min(100, Math.round((elapsed/duration)*100));
+    pctEl.textContent = p + '%';
+    if(p >= 100){
+      clearInterval(timer);
+      showContinueButton();
+    }
+  }, 60);
+
+  function showContinueButton(){
+    var btn = document.createElement('button');
+    btn.className = 'continue-btn';
+    btn.textContent = 'TAP TO CONTINUE';
+    btn.addEventListener('click', onContinue);
+    pctEl.replaceWith(btn);
+    if(fallbackLink) fallbackLink.style.display = 'none';
+  }
+
+  function onContinue(){
+    var willComplete = false;
+    try {
+      var arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      willComplete = arr.indexOf(ITEM_ID) === -1 && (arr.length + 1) === ALL_ITEMS.length;
+    } catch(e){}
+    try { playChime(willComplete); } catch(e){}
+    setTimeout(function(){ location.href = 'index.html?unlock=' + ITEM_ID; }, 650);
+  }
+
+  // ---- minimal audio helper (same tone style as the main inventory page) ----
+  var audioCtx;
+  function actx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+  function beep(freq, dur, vol, delay){
+    var c = actx();
+    var play = function(){
+      var t0 = c.currentTime + (delay || 0);
+      var osc = c.createOscillator();
+      var gain = c.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(vol || 0.15, t0);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t0); osc.stop(t0 + dur);
+    };
+    if(c.state === 'running'){ play(); } else { c.resume().then(play).catch(function(){}); }
+  }
+  function playChime(big){
+    if(big){ [523,659,784,1046].forEach(function(f,i){ beep(f,0.2,0.16,i*0.13); }); }
+    else { beep(523,0.09,0.15,0); beep(659,0.09,0.15,0.09); beep(784,0.16,0.15,0.18); }
+  }
+</script>
+</body>
+</html>
