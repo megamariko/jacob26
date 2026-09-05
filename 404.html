@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #f6a0db; --teal: #00efc3; --periwinkle: #95b0ec; --crimson: #f12454;
+    --pale: #feebff; --ink: #0a0a12;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; min-height:100%; background:#fff; color:var(--ink);
+    font-family:'Space Mono', monospace;
+    display:flex; align-items:center; justify-content:center; padding:36px 12px;
+  }
+  body{
+    background:
+      repeating-linear-gradient(135deg, rgba(241,36,84,.08) 0 2px, transparent 2px 42px),
+      repeating-linear-gradient(135deg, rgba(0,239,195,.10) 0 2px, transparent 2px 42px),
+      radial-gradient(circle at 15% 10%, rgba(246,160,219,.35), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(0,239,195,.30), transparent 45%),
+      #fff;
+    background-position: 0 0, 21px 21px, 0 0, 0 0;
+  }
+  .console{ width:min(94vw,440px); background:#fff; padding:24px 20px; position:relative;
+    border:3px solid var(--ink); box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--crimson), 0 0 26px rgba(0,239,195,.30);
+    text-align:center; }
+  .code{ font-family:'Press Start 2P', monospace; font-size:34px; margin:0 0 14px;
+    text-shadow: 2px 0 var(--crimson), -2px 0 var(--teal); }
+  .photo-frame{ width:160px; margin:0 auto 18px; border:3px solid var(--ink); overflow:hidden;
+    box-shadow: 4px 4px 0 var(--periwinkle); }
+  .photo-frame img{ width:100%; display:block; }
+  h1{ font-family:'Press Start 2P', monospace; font-size:12px; line-height:1.7; margin:0 0 10px; }
+  p{ font-size:14px; color:#555; line-height:1.5; margin:0 0 22px; }
+  a.home-btn{ display:inline-block; font-family:'Press Start 2P', monospace; font-size:11px;
+    background:var(--ink); color:#fff; text-decoration:none; padding:12px 18px;
+    box-shadow:3px 3px 0 var(--teal); }
+  a.home-btn:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--teal); }
+</style>
+</head>
+<body>
+<div class="console">
+  <div class="code">404</div>
+  <div class="photo-frame">
+    <img src="assets/jacob-404.jpg" alt="a very serious, very normal photo" title="exhibit A: your selfie skills">
+  </div>
+  <h1>PAGE NOT FOUND</h1>
+  <p>guess your sense of direction failed you for once.</p>
+  <a class="home-btn" href="/jacob26/">← BACK TO INVENTORY</a>
+</div>
+</body>
+</html>
